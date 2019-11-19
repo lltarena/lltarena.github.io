@@ -1,0 +1,28 @@
+public static boolean isMatch(String str, String p) {
+		if (str == null || p == null) {
+			return false;
+			
+		}
+		return isMatch(str, p, 0, 0);
+	}
+  
+	private static boolean isMatch(String str, String pattern, int s, int p) {
+    //正则表达式已用尽，如果字符串还未匹配完，则返回false
+		if (p == pattern.length()) {
+			return str.length() == s;
+		}
+    //正则表达式下一位为*,此刻考虑两种情况
+		if (p + 1 < pattern.length() && pattern.charAt(p + 1) == '*') {
+      //若正则表达式当前位字符与字符串当前位置相匹配，则匹配1位或者0位
+			if (s < str.length() && (str.charAt(s) == pattern.charAt(p) || pattern.charAt(p) == '.')) {
+				return (isMatch(str, pattern, s, p + 2) || isMatch(str, pattern, s + 1, p));
+			}
+      //若正则表达式与当前字符串位置不匹配，则匹配0位
+			return isMatch(str, pattern, s, p + 2);
+		}
+    //匹配1位
+		if (s < str.length() && (str.charAt(s) == pattern.charAt(p) || pattern.charAt(p) == '.')) {
+			return isMatch(str, pattern, s + 1, p + 1);
+		}
+		return false;
+	}
